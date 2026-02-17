@@ -1,0 +1,3364 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_10ea40ef89d31e3dd3fbc79b509ce151 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    <script src="https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.css"/>
+</head>
+<body>
+    
+    
+<div style="
+ position:fixed;
+ bottom:20px;
+ left:20px;
+ z-index:9999;
+ background:white;
+ padding:10px;
+ border-radius:6px;
+ border:1px solid #999;">
+<b>Radio cobertura (km)</b><br>
+<input type="range" min="5" max="150" value="50" oninput="updateRadius(this.value)">
+<span id="radiusValue">50</span> km
+</div>
+
+<script>
+function updateRadius(km){
+ document.getElementById("radiusValue").innerText = km;
+ var layer = feature_group_ca338ea596766a0a08eb5df4bd69e3fa;
+ for (var i in layer._layers){
+   if (layer._layers[i] instanceof L.Circle){
+     layer._layers[i].setRadius(km*1000);
+   }
+ }
+}
+</script>
+    
+<script>
+window.onload = function(){
+    var map = map_10ea40ef89d31e3dd3fbc79b509ce151;
+    var stations = [{"name": "SR78", "lat": -33.67, "lon": -71.19999999999999, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "BTOR", "lat": -32.65, "lon": -71.16000000000003, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "MSOL", "lat": -32.65, "lon": -71.12, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO", "network": "Geocom"}, {"name": "MVDE", "lat": -26.55, "lon": -70.32, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "SCCF", "lat": -33.63, "lon": -71.57, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "BALB", "lat": -23.44, "lon": -69.51999999999998, "format": "RTCM 3.2", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "CASC", "lat": -20.96, "lon": -68.67000000000002, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "BPOL", "lat": -33.16, "lon": -70.82, "format": "RTCM 3.3", "details": "MSM3", "system": "GPS+GLO+GAL", "network": "Geocom"}, {"name": "CMCC", "lat": -20.06, "lon": -69.25999999999999, "format": "RTCM 3.2", "details": "", "system": "GPS+GLO+GAL", "network": "Geocom"}, {"name": "EMMB", "lat": -23.42, "lon": -70.06, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "CCMC", "lat": -27.52, "lon": -70.27999999999997, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO", "network": "Geocom"}, {"name": "ZALD", "lat": -24.21, "lon": -69.07, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "SPNC", "lat": -22.79, "lon": -69.25999999999999, "format": "RTCM 3.2", "details": "MSM5", "system": "GPS+GLO+GAL", "network": "Geocom"}, {"name": "SQMS", "lat": -23.54, "lon": -68.37, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "BTES", "lat": -22.95, "lon": -69.07, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "BESP", "lat": -31.4, "lon": -71.11000000000001, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "ESPZ", "lat": -22.97, "lon": -69.07, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "BOXE", "lat": -23.07, "lon": -69.10000000000002, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "ANTU", "lat": -22.64, "lon": -69.88, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "SQMH", "lat": -23.5, "lon": -68.30000000000001, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "BESC", "lat": -24.28, "lon": -69.08999999999997, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "BMDO", "lat": -26.82, "lon": -69.23000000000002, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "BRTC", "lat": -22.22, "lon": -68.87, "format": "RTCM 3.3", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "TMCO", "lat": -38.75, "lon": -72.63, "format": "RTCM 3.4", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "BOLB", "lat": -33.17, "lon": -70.29000000000002, "format": "RTCM 3.4", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "DMHC", "lat": -22.44, "lon": -68.92000000000002, "format": "RTCM 3.4", "details": "MSM5", "system": "GPS+GLO", "network": "Geocom"}, {"name": "CONZ", "lat": -36.84, "lon": -73.01999999999998, "format": "RTCM 3.4", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "CNCN", "lat": -32.93, "lon": -71.49000000000001, "format": "RTCM 3.4", "details": "MSM5", "system": "GPS+GLO+GAL", "network": "Geocom"}, {"name": "PTMT", "lat": -41.46, "lon": -72.95999999999998, "format": "RTCM 3.4", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "SCOL", "lat": -33.43, "lon": -70.57999999999998, "format": "RTCM 3.4", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "SNTI", "lat": -33.44, "lon": -70.61000000000001, "format": "RTCM 3.4", "details": "MSM5", "system": "GPS+GLO+GAL+BDS+QZS", "network": "Geocom"}, {"name": "TALC", "lat": -35.41, "lon": -71.63999999999999, "format": "RTCM 3.4", "details": "MSM5", "system": "GPS+GLO", "network": "Geocom"}, {"name": "VLDV", "lat": -39.84, "lon": -73.20999999999998, "format": "RTCM 3.4", "details": "MSM5", "system": "GPS+GLO", "network": "Geocom"}, {"name": "UTAR", "lat": -18.49, "lon": -70.30000000000001, "format": "RTCM 3.0", "details": "MSM5", "system": "GPS+GLO", "network": "CSN"}, {"name": "UDEC", "lat": -37.47, "lon": -72.33999999999997, "format": "RTCM 3.0", "details": "", "system": "GPS+GLO", "network": "CSN"}, {"name": "CBAA", "lat": -22.75, "lon": -68.44999999999999, "format": "RTCM 3.0", "details": "", "system": "GPS+GLO", "network": "CSN"}, {"name": "CHDA", "lat": -33.99, "lon": -70.61000000000001, "format": "RTCM 3.0", "details": "", "system": "GPS+GLO", "network": "CSN"}, {"name": "CSOM", "lat": -52.78, "lon": -69.22000000000003, "format": "RTCM 3.0", "details": "", "system": "GPS+GLO", "network": "CSN"}, {"name": "GTA1", "lat": -20.99, "lon": -70.18, "format": "RTCM 3.0", "details": "MSM4", "system": "GPS+GLO", "network": "CSN"}, {"name": "MRCG", "lat": -26.84, "lon": -69.13, "format": "RTCM 3.0", "details": "MSM4", "system": "GPS+GLO", "network": "CSN"}, {"name": "FUTF", "lat": -43.19, "lon": -71.85000000000002, "format": "RTCM 3.0", "details": "", "system": "GPS+GLO", "network": "CSN"}, {"name": "PECL", "lat": -37.68, "lon": -73.64999999999998, "format": "RTCM 3.0", "details": "MSM4", "system": "GPS+GLO", "network": "CSN"}, {"name": "PCCL", "lat": -18.45, "lon": -70.11000000000001, "format": "RTCM 3.0", "details": "MSM4", "system": "GPS+GLO", "network": "CSN"}, {"name": "PEDR", "lat": -30.84, "lon": -70.69, "format": "RTCM 3.0", "details": "", "system": "GPS+GLO", "network": "CSN"}, {"name": "PTRO", "lat": -41.14, "lon": -72.39999999999998, "format": "RTCM 3.0", "details": "MSM4", "system": "GPS+GLO", "network": "CSN"}, {"name": "PTAR", "lat": -53.16, "lon": -71.05000000000001, "format": "RTCM 3.0", "details": "MSM4", "system": "GPS+GLO", "network": "CSN"}, {"name": "PLVP", "lat": -37.15, "lon": -73.57999999999998, "format": "RTCM 3.0", "details": "MSM4", "system": "GPS+GLO", "network": "CSN"}, {"name": "TAMR", "lat": -27.59, "lon": -70.31, "format": "RTCM 3.0", "details": "MSM4", "system": "GPS+GLO", "network": "CSN"}, {"name": "SBLL", "lat": -34.79, "lon": -70.77999999999997, "format": "RTCM 3.0", "details": "MSM4", "system": "GPS+GLO", "network": "CSN"}, {"name": "ROB1", "lat": -32.98, "lon": -71.00999999999999, "format": "RTCM 3.0", "details": "MSM4", "system": "GPS+GLO", "network": "CSN"}, {"name": "TRPD", "lat": -33.02, "lon": -71.63999999999999, "format": "RTCM 3.0", "details": "", "system": "GPS+GLO", "network": "CSN"}, {"name": "XPLO", "lat": -46.48, "lon": -73.19, "format": "RTCM 3.0", "details": "", "system": "GPS+GLO", "network": "CSN"}, {"name": "CCSN", "lat": -33.46, "lon": -70.66000000000003, "format": "RTCM 3.0", "details": "", "system": "GPS+GLO", "network": "CSN"}, {"name": "DGF1", "lat": -33.46, "lon": -70.66000000000003, "format": "RTCM 3.0", "details": "", "system": "GPS+GLO", "network": "CSN"}, {"name": "USCL", "lat": -33.45, "lon": -70.68, "format": "RTCM 3.3", "details": "", "system": "GPS+GLO+GAL+BDS+QZS", "network": "IGS"}, {"name": "UAIB", "lat": -33.49, "lon": -70.50999999999999, "format": "RTCM 3.0", "details": "", "system": "GPS+GLO", "network": "CSN"}, {"name": "SANT", "lat": -33.15, "lon": -70.67000000000002, "format": "RTCM 3.2", "details": "MSM6", "system": "IGS", "network": "JPL"}, {"name": "ANTC", "lat": -37.34, "lon": -71.52999999999997, "format": "RTCM 3.3", "details": "", "system": "GPS+GLO", "network": "IGS"}, {"name": "ANTF", "lat": -23.7, "lon": -70.42000000000002, "format": "RTCM 3.3", "details": "", "system": "GPS+GLO+GAL+BDS", "network": "IGS"}, {"name": "IQQE", "lat": -20.27, "lon": -70.13, "format": "RTCM 3.1", "details": "", "system": "GPS+GLO", "network": "IGS"}, {"name": "TEJA", "lat": -39.81, "lon": -73.25, "format": "RTCM 3.3", "details": "", "system": "GPS+GLO+GAL+BDS", "network": "IGS"}, {"name": "CPPO", "lat": -27.39, "lon": -70.32, "format": "RTCM 3.3", "details": "MSM4", "system": "GPS+GLO+GAL+BDS", "network": "GA"}, {"name": "OSOR", "lat": -40.9, "lon": -72.41000000000003, "format": "RTCM 3.3", "details": "MSM4", "system": "GPS+GLO+GAL+BDS", "network": "GA"}, {"name": "ANTO", "lat": -23.66, "lon": -70.38999999999999, "format": "RTCM 3.3", "details": "MSM4", "system": "GPS+GLO+GAL+BDS", "network": "GA"}, {"name": "LLAY", "lat": -32.84, "lon": -70.94, "format": "RTCM 3.3", "details": "MSM4", "system": "GPS+GLO+GAL+BDS", "network": "GA"}, {"name": "TEMU", "lat": -38.72, "lon": -72.66000000000003, "format": "RTCM 3.3", "details": "MSM4", "system": "GPS+GLO+GAL+BDS", "network": "GA"}, {"name": "CLMA", "lat": -22.44, "lon": -68.88, "format": "RTCM 3.3", "details": "MSM4", "system": "GPS+GLO+GAL+BDS", "network": "GA"}, {"name": "VALP", "lat": -33.12, "lon": -71.57999999999998, "format": "RTCM 3.3", "details": "MSM4", "system": "GPS+GLO+GAL+BDS", "network": "GA"}];
+    var userMarker = null;
+    var accuracyCircle = null;
+    var nearestMarker = null;
+    var nearestLine = null;
+
+    var geoBanner = document.createElement('div');
+    geoBanner.style.position = 'fixed';
+    geoBanner.style.bottom = '100px';
+    geoBanner.style.right = '20px';
+    geoBanner.style.background = 'white';
+    geoBanner.style.padding = '6px 10px';
+    geoBanner.style.border = '1px solid #999';
+    geoBanner.style.borderRadius = '6px';
+    geoBanner.style.fontSize = '14px';
+    geoBanner.style.zIndex = 9999;
+    geoBanner.innerHTML = '📍 Esperando activación de ubicación';
+    document.body.appendChild(geoBanner);
+
+    var geoBtn = document.createElement('button');
+    geoBtn.innerHTML = '📍 Ir a mi ubicación';
+    geoBtn.style.position = 'fixed';
+    geoBtn.style.bottom = '60px';
+    geoBtn.style.right = '20px';
+    geoBtn.style.zIndex = 9999;
+    geoBtn.style.padding = '6px 10px';
+    geoBtn.style.fontSize = '14px';
+    geoBtn.style.borderRadius = '6px';
+    geoBtn.style.border = '1px solid #999';
+    geoBtn.style.background = 'white';
+    geoBtn.style.cursor = 'pointer';
+    document.body.appendChild(geoBtn);
+
+    function distance(lat1, lon1, lat2, lon2){
+        const R = 6371;
+        const dLat = (lat2-lat1)*Math.PI/180;
+        const dLon = (lon2-lon1)*Math.PI/180;
+        const a = Math.sin(dLat/2)**2 +
+                  Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180) *
+                  Math.sin(dLon/2)**2;
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    }
+
+    function updatePosition(pos){
+        var lat = pos.coords.latitude;
+        var lon = pos.coords.longitude;
+
+        if(!userMarker){
+            userMarker = L.marker([lat, lon]).addTo(map)
+                .bindPopup("📍 Tu ubicación").openPopup();
+        } else {
+            userMarker.setLatLng([lat, lon]);
+        }
+
+        if(!accuracyCircle){
+            accuracyCircle = L.circle([lat, lon], {
+                radius: pos.coords.accuracy,
+                color:"red",
+                fillOpacity:0.15
+            }).addTo(map);
+        } else {
+            accuracyCircle.setLatLng([lat, lon])
+                          .setRadius(pos.coords.accuracy);
+        }
+
+        var minD = Infinity;
+        var nearest = null;
+        stations.forEach(function(s){
+            var d = distance(lat, lon, s.lat, s.lon);
+            if(d < minD){ minD = d; nearest = s; }
+        });
+
+        if(nearest){
+            geoBanner.innerHTML =
+              '✅ Geolocalización activada - Estación más cercana: ' +
+              nearest.name + ' (' + minD.toFixed(2) + ' km)';
+
+            if(nearestMarker) map.removeLayer(nearestMarker);
+            if(nearestLine) map.removeLayer(nearestLine);
+
+            nearestMarker = L.circleMarker(
+                [nearest.lat, nearest.lon],
+                {
+                    radius:10,
+                    color:"red",
+                    fillColor:"yellow",
+                    fillOpacity:1
+                }
+            ).addTo(map)
+             .bindPopup(
+               "⭐ Estación más cercana<br><b>" +
+               nearest.name + "</b><br>" +
+               minD.toFixed(2) + " km"
+             );
+
+            nearestLine = L.polyline(
+                [[lat, lon],[nearest.lat, nearest.lon]],
+                {color:"red", dashArray:"5,5"}
+            ).addTo(map);
+        }
+    }
+
+    if(navigator.geolocation){
+        navigator.geolocation.watchPosition(
+            updatePosition,
+            function(err){ alert("No se pudo obtener la ubicación: " + err.message); },
+            { enableHighAccuracy:true }
+        );
+    }
+
+    geoBtn.onclick = function(){
+        if(userMarker){
+            map.setView(userMarker.getLatLng(), 14);
+        }
+    };
+};
+</script>
+    
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"/>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+<style>
+.leaflet-control-geocoder {
+    z-index: 9999 !important;
+}
+</style>
+
+<script>
+window.addEventListener("load", function(){
+    var map = map_10ea40ef89d31e3dd3fbc79b509ce151;
+    L.Control.geocoder({
+        position: 'topleft',
+        placeholder: 'Buscar ciudad o localidad...',
+        defaultMarkGeocode: true
+    }).addTo(map);
+});
+</script>
+    
+            <div class="folium-map" id="map_10ea40ef89d31e3dd3fbc79b509ce151" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_10ea40ef89d31e3dd3fbc79b509ce151 = L.map(
+                "map_10ea40ef89d31e3dd3fbc79b509ce151",
+                {
+                    center: [-30.923382352941175, -70.6754411764706],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 6,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_55855d7db9e9b378e396487ac10b4ca5 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            var tile_layer_479ad8d42f84618fe94037c042466a56 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_479ad8d42f84618fe94037c042466a56.addTo(map_10ea40ef89d31e3dd3fbc79b509ce151);
+        
+    
+            var tile_layer_d34f86d4273cd741f1ebb0b6d861bdb8 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            var feature_group_01be318647ef818431627a21394e3786 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_21c640a9810609d3b6e9db76c0e76e6a = L.marker(
+                [-33.67, -71.19999999999999],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_7671dcad78f2f5fc4a824f79306c5aff = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_6bbd65ed62a8175c0f10558eb24269bc = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5c965f118c3daa66da1f58350ef0cdfb = $(`<div id="html_5c965f118c3daa66da1f58350ef0cdfb" style="width: 100.0%; height: 100.0%;">         <b>SR78</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_6bbd65ed62a8175c0f10558eb24269bc.setContent(html_5c965f118c3daa66da1f58350ef0cdfb);
+            
+        
+
+        marker_21c640a9810609d3b6e9db76c0e76e6a.bindPopup(popup_6bbd65ed62a8175c0f10558eb24269bc)
+        ;
+
+        
+    
+    
+                marker_21c640a9810609d3b6e9db76c0e76e6a.setIcon(icon_7671dcad78f2f5fc4a824f79306c5aff);
+            
+    
+            var marker_788e830369c06ab1ffe9c100a074592c = L.marker(
+                [-32.65, -71.16000000000003],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_02d1ce47693c84743d5fea08b3012811 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_97083230158c26742f754f8375325876 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_9f7fb41036f3eef9469f31f3f7ee254b = $(`<div id="html_9f7fb41036f3eef9469f31f3f7ee254b" style="width: 100.0%; height: 100.0%;">         <b>BTOR</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_97083230158c26742f754f8375325876.setContent(html_9f7fb41036f3eef9469f31f3f7ee254b);
+            
+        
+
+        marker_788e830369c06ab1ffe9c100a074592c.bindPopup(popup_97083230158c26742f754f8375325876)
+        ;
+
+        
+    
+    
+                marker_788e830369c06ab1ffe9c100a074592c.setIcon(icon_02d1ce47693c84743d5fea08b3012811);
+            
+    
+            var marker_f76f6d511631ce5f41c0ee69a432c7b8 = L.marker(
+                [-32.65, -71.12],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_9cda05197b4863557fefc033f6c99d2d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_f1281b8c6d5beeca11ef6a3958b217ea = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1f8bf25e445cec4dccdd68671b2f3115 = $(`<div id="html_1f8bf25e445cec4dccdd68671b2f3115" style="width: 100.0%; height: 100.0%;">         <b>MSOL</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_f1281b8c6d5beeca11ef6a3958b217ea.setContent(html_1f8bf25e445cec4dccdd68671b2f3115);
+            
+        
+
+        marker_f76f6d511631ce5f41c0ee69a432c7b8.bindPopup(popup_f1281b8c6d5beeca11ef6a3958b217ea)
+        ;
+
+        
+    
+    
+                marker_f76f6d511631ce5f41c0ee69a432c7b8.setIcon(icon_9cda05197b4863557fefc033f6c99d2d);
+            
+    
+            var marker_192e5e73af67472ca7c8fca8b2257bd4 = L.marker(
+                [-26.55, -70.32],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_629273940016c0d9cbc8e80d71622baf = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c1199014f7500416c668f8169d6bb82d = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_b3081f5c189e546d22ab6247889b0d06 = $(`<div id="html_b3081f5c189e546d22ab6247889b0d06" style="width: 100.0%; height: 100.0%;">         <b>MVDE</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_c1199014f7500416c668f8169d6bb82d.setContent(html_b3081f5c189e546d22ab6247889b0d06);
+            
+        
+
+        marker_192e5e73af67472ca7c8fca8b2257bd4.bindPopup(popup_c1199014f7500416c668f8169d6bb82d)
+        ;
+
+        
+    
+    
+                marker_192e5e73af67472ca7c8fca8b2257bd4.setIcon(icon_629273940016c0d9cbc8e80d71622baf);
+            
+    
+            var marker_88f6f0c50532af43ed01778fd5954abd = L.marker(
+                [-33.63, -71.57],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_f657373810038947e848e7cefd3d0f05 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_5773273b6145cfe8414e6addd6a44300 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_0ec17ad8a767b030dd7e7dcac33d6c48 = $(`<div id="html_0ec17ad8a767b030dd7e7dcac33d6c48" style="width: 100.0%; height: 100.0%;">         <b>SCCF</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_5773273b6145cfe8414e6addd6a44300.setContent(html_0ec17ad8a767b030dd7e7dcac33d6c48);
+            
+        
+
+        marker_88f6f0c50532af43ed01778fd5954abd.bindPopup(popup_5773273b6145cfe8414e6addd6a44300)
+        ;
+
+        
+    
+    
+                marker_88f6f0c50532af43ed01778fd5954abd.setIcon(icon_f657373810038947e848e7cefd3d0f05);
+            
+    
+            var marker_7d44da9f870679ab726974595145af9c = L.marker(
+                [-23.44, -69.51999999999998],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_61554ff089c0f6e8d86972f7c3f69453 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_34cd17dd26ae8839d9a1e4a20a3da39a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_720eb98123464f9c1c6b6d5d9c40058b = $(`<div id="html_720eb98123464f9c1c6b6d5d9c40058b" style="width: 100.0%; height: 100.0%;">         <b>BALB</b><br>         <b>Formato:</b> RTCM 3.2<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_34cd17dd26ae8839d9a1e4a20a3da39a.setContent(html_720eb98123464f9c1c6b6d5d9c40058b);
+            
+        
+
+        marker_7d44da9f870679ab726974595145af9c.bindPopup(popup_34cd17dd26ae8839d9a1e4a20a3da39a)
+        ;
+
+        
+    
+    
+                marker_7d44da9f870679ab726974595145af9c.setIcon(icon_61554ff089c0f6e8d86972f7c3f69453);
+            
+    
+            var marker_c0dacbbe188d61d9d1636d8b3009072a = L.marker(
+                [-20.96, -68.67000000000002],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_5c6a2ca5bab2e198f881f604f2cf6b6f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_321ecf44bef16eaf3a00822957292e46 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_3234276d9f9b7702a763497ee672f160 = $(`<div id="html_3234276d9f9b7702a763497ee672f160" style="width: 100.0%; height: 100.0%;">         <b>CASC</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_321ecf44bef16eaf3a00822957292e46.setContent(html_3234276d9f9b7702a763497ee672f160);
+            
+        
+
+        marker_c0dacbbe188d61d9d1636d8b3009072a.bindPopup(popup_321ecf44bef16eaf3a00822957292e46)
+        ;
+
+        
+    
+    
+                marker_c0dacbbe188d61d9d1636d8b3009072a.setIcon(icon_5c6a2ca5bab2e198f881f604f2cf6b6f);
+            
+    
+            var marker_2f968b1083203699a2fff8b40f11e334 = L.marker(
+                [-33.16, -70.82],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_7aab2e685261a1cb189324c7ad3341ec = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_35f4ed35e0af35faf6d08d749af3be10 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4333c4efa2a28294268eb99694ca8f15 = $(`<div id="html_4333c4efa2a28294268eb99694ca8f15" style="width: 100.0%; height: 100.0%;">         <b>BPOL</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM3<br>         <b>Sistema:</b> GPS+GLO+GAL<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_35f4ed35e0af35faf6d08d749af3be10.setContent(html_4333c4efa2a28294268eb99694ca8f15);
+            
+        
+
+        marker_2f968b1083203699a2fff8b40f11e334.bindPopup(popup_35f4ed35e0af35faf6d08d749af3be10)
+        ;
+
+        
+    
+    
+                marker_2f968b1083203699a2fff8b40f11e334.setIcon(icon_7aab2e685261a1cb189324c7ad3341ec);
+            
+    
+            var marker_2329bbc6d0f995ccdf0d63c90c75f220 = L.marker(
+                [-20.06, -69.25999999999999],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_9f637a7b308ed99d2db8167f234bf125 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_6cf57fa52a235df1a776a5320986f0a4 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_2256f895197edecb817858cd2b86388b = $(`<div id="html_2256f895197edecb817858cd2b86388b" style="width: 100.0%; height: 100.0%;">         <b>CMCC</b><br>         <b>Formato:</b> RTCM 3.2<br>         <b>Detalles:</b> <br>         <b>Sistema:</b> GPS+GLO+GAL<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_6cf57fa52a235df1a776a5320986f0a4.setContent(html_2256f895197edecb817858cd2b86388b);
+            
+        
+
+        marker_2329bbc6d0f995ccdf0d63c90c75f220.bindPopup(popup_6cf57fa52a235df1a776a5320986f0a4)
+        ;
+
+        
+    
+    
+                marker_2329bbc6d0f995ccdf0d63c90c75f220.setIcon(icon_9f637a7b308ed99d2db8167f234bf125);
+            
+    
+            var marker_0b48aafa37e91c9e43cf92c62498d1ab = L.marker(
+                [-23.42, -70.06],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_fd1358cae92f8073f4ff03dfbeaade49 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_9ff575472e7b55cd26ffcd3814f99c90 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_0bc4bb76d7de9cf0747471d57a5f8a76 = $(`<div id="html_0bc4bb76d7de9cf0747471d57a5f8a76" style="width: 100.0%; height: 100.0%;">         <b>EMMB</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_9ff575472e7b55cd26ffcd3814f99c90.setContent(html_0bc4bb76d7de9cf0747471d57a5f8a76);
+            
+        
+
+        marker_0b48aafa37e91c9e43cf92c62498d1ab.bindPopup(popup_9ff575472e7b55cd26ffcd3814f99c90)
+        ;
+
+        
+    
+    
+                marker_0b48aafa37e91c9e43cf92c62498d1ab.setIcon(icon_fd1358cae92f8073f4ff03dfbeaade49);
+            
+    
+            var marker_984e629b46f958953ab3b3b70cab4ca9 = L.marker(
+                [-27.52, -70.27999999999997],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_a71ca807ec39ff81dd2a71f40118eac6 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_b89bbbe8791c1c89eb33b68e91006d86 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_688d8ce9eec0c078f0afe14f7f3989e5 = $(`<div id="html_688d8ce9eec0c078f0afe14f7f3989e5" style="width: 100.0%; height: 100.0%;">         <b>CCMC</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_b89bbbe8791c1c89eb33b68e91006d86.setContent(html_688d8ce9eec0c078f0afe14f7f3989e5);
+            
+        
+
+        marker_984e629b46f958953ab3b3b70cab4ca9.bindPopup(popup_b89bbbe8791c1c89eb33b68e91006d86)
+        ;
+
+        
+    
+    
+                marker_984e629b46f958953ab3b3b70cab4ca9.setIcon(icon_a71ca807ec39ff81dd2a71f40118eac6);
+            
+    
+            var marker_104703e07d845a2a619cf69723659a74 = L.marker(
+                [-24.21, -69.07],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_44a1f375fba1d3959f3679e0f75526ab = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_756c0d00e02393566242af48093eb695 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_af0ae22c286d007cd4a0fb84b7dcbb0a = $(`<div id="html_af0ae22c286d007cd4a0fb84b7dcbb0a" style="width: 100.0%; height: 100.0%;">         <b>ZALD</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_756c0d00e02393566242af48093eb695.setContent(html_af0ae22c286d007cd4a0fb84b7dcbb0a);
+            
+        
+
+        marker_104703e07d845a2a619cf69723659a74.bindPopup(popup_756c0d00e02393566242af48093eb695)
+        ;
+
+        
+    
+    
+                marker_104703e07d845a2a619cf69723659a74.setIcon(icon_44a1f375fba1d3959f3679e0f75526ab);
+            
+    
+            var marker_dad6c61dc6291bf8d4b7121449647868 = L.marker(
+                [-22.79, -69.25999999999999],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_5c646842ff6700dddc16e2686e6bb10e = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_6918e8a7108ba2971d37806788cd02af = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_c9a5cdf584cbfc06a3058c06c7c687d9 = $(`<div id="html_c9a5cdf584cbfc06a3058c06c7c687d9" style="width: 100.0%; height: 100.0%;">         <b>SPNC</b><br>         <b>Formato:</b> RTCM 3.2<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_6918e8a7108ba2971d37806788cd02af.setContent(html_c9a5cdf584cbfc06a3058c06c7c687d9);
+            
+        
+
+        marker_dad6c61dc6291bf8d4b7121449647868.bindPopup(popup_6918e8a7108ba2971d37806788cd02af)
+        ;
+
+        
+    
+    
+                marker_dad6c61dc6291bf8d4b7121449647868.setIcon(icon_5c646842ff6700dddc16e2686e6bb10e);
+            
+    
+            var marker_35ef8e2a2515b4d664c3b1847ac244e9 = L.marker(
+                [-23.54, -68.37],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_3526b7a405567d6486b1ad017c87c374 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e037b497ba035a1eab7ce85d5a5f8c4e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f06d4406529c507386fca8220dd9854c = $(`<div id="html_f06d4406529c507386fca8220dd9854c" style="width: 100.0%; height: 100.0%;">         <b>SQMS</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_e037b497ba035a1eab7ce85d5a5f8c4e.setContent(html_f06d4406529c507386fca8220dd9854c);
+            
+        
+
+        marker_35ef8e2a2515b4d664c3b1847ac244e9.bindPopup(popup_e037b497ba035a1eab7ce85d5a5f8c4e)
+        ;
+
+        
+    
+    
+                marker_35ef8e2a2515b4d664c3b1847ac244e9.setIcon(icon_3526b7a405567d6486b1ad017c87c374);
+            
+    
+            var marker_73ce3eb8b9f314cd44bd4b9cf30f8237 = L.marker(
+                [-22.95, -69.07],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_ec3a3c65d9f5c154a6c7055d99c2a470 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_04064bb1feaa9d7112431c235d6ab864 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_207f51fe9e8f083f0841c73130ba16d0 = $(`<div id="html_207f51fe9e8f083f0841c73130ba16d0" style="width: 100.0%; height: 100.0%;">         <b>BTES</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_04064bb1feaa9d7112431c235d6ab864.setContent(html_207f51fe9e8f083f0841c73130ba16d0);
+            
+        
+
+        marker_73ce3eb8b9f314cd44bd4b9cf30f8237.bindPopup(popup_04064bb1feaa9d7112431c235d6ab864)
+        ;
+
+        
+    
+    
+                marker_73ce3eb8b9f314cd44bd4b9cf30f8237.setIcon(icon_ec3a3c65d9f5c154a6c7055d99c2a470);
+            
+    
+            var marker_308084206b56ee5264c9ad639ee75337 = L.marker(
+                [-31.4, -71.11000000000001],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_bd8e9197eaa0146017afe1f1461eb8e0 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_7785c5f3547943e4a6b8023e6196eecf = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_34323aeccb783facd2fb1eb7585dd143 = $(`<div id="html_34323aeccb783facd2fb1eb7585dd143" style="width: 100.0%; height: 100.0%;">         <b>BESP</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_7785c5f3547943e4a6b8023e6196eecf.setContent(html_34323aeccb783facd2fb1eb7585dd143);
+            
+        
+
+        marker_308084206b56ee5264c9ad639ee75337.bindPopup(popup_7785c5f3547943e4a6b8023e6196eecf)
+        ;
+
+        
+    
+    
+                marker_308084206b56ee5264c9ad639ee75337.setIcon(icon_bd8e9197eaa0146017afe1f1461eb8e0);
+            
+    
+            var marker_d963444d8c54848f94df1482099eccaf = L.marker(
+                [-22.97, -69.07],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_c6878b36a53475227016ee93c0eb0d7b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_3c15c6ebde8f50af2445f5d6153bb03a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_b408554740049c553409676e6d5875cb = $(`<div id="html_b408554740049c553409676e6d5875cb" style="width: 100.0%; height: 100.0%;">         <b>ESPZ</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_3c15c6ebde8f50af2445f5d6153bb03a.setContent(html_b408554740049c553409676e6d5875cb);
+            
+        
+
+        marker_d963444d8c54848f94df1482099eccaf.bindPopup(popup_3c15c6ebde8f50af2445f5d6153bb03a)
+        ;
+
+        
+    
+    
+                marker_d963444d8c54848f94df1482099eccaf.setIcon(icon_c6878b36a53475227016ee93c0eb0d7b);
+            
+    
+            var marker_85000d0414b9240392d409f62db3a591 = L.marker(
+                [-23.07, -69.10000000000002],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_160c57b5eb4303aea3122869966dc204 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_18a46c620ffa8cae06ca9d2535d1a4f6 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_b3b465773190b1598d85f190bdbbda87 = $(`<div id="html_b3b465773190b1598d85f190bdbbda87" style="width: 100.0%; height: 100.0%;">         <b>BOXE</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_18a46c620ffa8cae06ca9d2535d1a4f6.setContent(html_b3b465773190b1598d85f190bdbbda87);
+            
+        
+
+        marker_85000d0414b9240392d409f62db3a591.bindPopup(popup_18a46c620ffa8cae06ca9d2535d1a4f6)
+        ;
+
+        
+    
+    
+                marker_85000d0414b9240392d409f62db3a591.setIcon(icon_160c57b5eb4303aea3122869966dc204);
+            
+    
+            var marker_4cbedb063227c0d8babcdcd7fd92002a = L.marker(
+                [-22.64, -69.88],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_09c3ef0ae3bc59fc4c9d1229665564e4 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_be5eda5184490da2c126a8f2821d2b8a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_c122f34cd394f6532d0c1e294e754023 = $(`<div id="html_c122f34cd394f6532d0c1e294e754023" style="width: 100.0%; height: 100.0%;">         <b>ANTU</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_be5eda5184490da2c126a8f2821d2b8a.setContent(html_c122f34cd394f6532d0c1e294e754023);
+            
+        
+
+        marker_4cbedb063227c0d8babcdcd7fd92002a.bindPopup(popup_be5eda5184490da2c126a8f2821d2b8a)
+        ;
+
+        
+    
+    
+                marker_4cbedb063227c0d8babcdcd7fd92002a.setIcon(icon_09c3ef0ae3bc59fc4c9d1229665564e4);
+            
+    
+            var marker_a59a1f7ed82c8b3a8eeb2d58575b13da = L.marker(
+                [-23.5, -68.30000000000001],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_970c6fabc1faac4775187b90aea6f2f2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_6a6ad63079b9f020d0698c4c93fad49b = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_9f70be1b65d7393bd9f7b2996402ec0f = $(`<div id="html_9f70be1b65d7393bd9f7b2996402ec0f" style="width: 100.0%; height: 100.0%;">         <b>SQMH</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_6a6ad63079b9f020d0698c4c93fad49b.setContent(html_9f70be1b65d7393bd9f7b2996402ec0f);
+            
+        
+
+        marker_a59a1f7ed82c8b3a8eeb2d58575b13da.bindPopup(popup_6a6ad63079b9f020d0698c4c93fad49b)
+        ;
+
+        
+    
+    
+                marker_a59a1f7ed82c8b3a8eeb2d58575b13da.setIcon(icon_970c6fabc1faac4775187b90aea6f2f2);
+            
+    
+            var marker_8edc5c2fab76854a645b6dcc87431043 = L.marker(
+                [-24.28, -69.08999999999997],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_86cd0a4904a45f2c0044f677b017fd5b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_9ecefd0ad23f70e1d102facf72e26f13 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d1db21ca37e993ba6e0d83c844fe49aa = $(`<div id="html_d1db21ca37e993ba6e0d83c844fe49aa" style="width: 100.0%; height: 100.0%;">         <b>BESC</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_9ecefd0ad23f70e1d102facf72e26f13.setContent(html_d1db21ca37e993ba6e0d83c844fe49aa);
+            
+        
+
+        marker_8edc5c2fab76854a645b6dcc87431043.bindPopup(popup_9ecefd0ad23f70e1d102facf72e26f13)
+        ;
+
+        
+    
+    
+                marker_8edc5c2fab76854a645b6dcc87431043.setIcon(icon_86cd0a4904a45f2c0044f677b017fd5b);
+            
+    
+            var marker_8c644ebd8c795e9faba78896f2032df4 = L.marker(
+                [-26.82, -69.23000000000002],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_5025325f56149073d9bf9e239547c728 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_70f784a6fb7b822323919eaf63c2b2e3 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5766042f5b86bc5dba216c9e5eca55ef = $(`<div id="html_5766042f5b86bc5dba216c9e5eca55ef" style="width: 100.0%; height: 100.0%;">         <b>BMDO</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_70f784a6fb7b822323919eaf63c2b2e3.setContent(html_5766042f5b86bc5dba216c9e5eca55ef);
+            
+        
+
+        marker_8c644ebd8c795e9faba78896f2032df4.bindPopup(popup_70f784a6fb7b822323919eaf63c2b2e3)
+        ;
+
+        
+    
+    
+                marker_8c644ebd8c795e9faba78896f2032df4.setIcon(icon_5025325f56149073d9bf9e239547c728);
+            
+    
+            var marker_44eaf1a21bc148348f5087801bd0a0cc = L.marker(
+                [-22.22, -68.87],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_0b0d12c32e8d1a6a6f1b94491f5bdcc9 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e534f5a6fdf44a0ebb84703ba9f4efe0 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_0a5a8e8bef92fa56a9d6d164e9fe63ee = $(`<div id="html_0a5a8e8bef92fa56a9d6d164e9fe63ee" style="width: 100.0%; height: 100.0%;">         <b>BRTC</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_e534f5a6fdf44a0ebb84703ba9f4efe0.setContent(html_0a5a8e8bef92fa56a9d6d164e9fe63ee);
+            
+        
+
+        marker_44eaf1a21bc148348f5087801bd0a0cc.bindPopup(popup_e534f5a6fdf44a0ebb84703ba9f4efe0)
+        ;
+
+        
+    
+    
+                marker_44eaf1a21bc148348f5087801bd0a0cc.setIcon(icon_0b0d12c32e8d1a6a6f1b94491f5bdcc9);
+            
+    
+            var marker_14b64d2883fb9ad616ef7891ac609a1c = L.marker(
+                [-38.75, -72.63],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_40334e4824ffec7804c800827dfcc40f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_df2dfbd774c5e33526d154a4438cfd85 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_900b70e4621e4a344f3afed27c9afc2c = $(`<div id="html_900b70e4621e4a344f3afed27c9afc2c" style="width: 100.0%; height: 100.0%;">         <b>TMCO</b><br>         <b>Formato:</b> RTCM 3.4<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_df2dfbd774c5e33526d154a4438cfd85.setContent(html_900b70e4621e4a344f3afed27c9afc2c);
+            
+        
+
+        marker_14b64d2883fb9ad616ef7891ac609a1c.bindPopup(popup_df2dfbd774c5e33526d154a4438cfd85)
+        ;
+
+        
+    
+    
+                marker_14b64d2883fb9ad616ef7891ac609a1c.setIcon(icon_40334e4824ffec7804c800827dfcc40f);
+            
+    
+            var marker_bf284b26f76adfbb262d40e23321f707 = L.marker(
+                [-33.17, -70.29000000000002],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_62057c5269654b2b96c99355eb9c2898 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d652a278d968ca3ce5de9c3f6d34f5ca = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_15078b6e742b8cb149717e0a89d4457b = $(`<div id="html_15078b6e742b8cb149717e0a89d4457b" style="width: 100.0%; height: 100.0%;">         <b>BOLB</b><br>         <b>Formato:</b> RTCM 3.4<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_d652a278d968ca3ce5de9c3f6d34f5ca.setContent(html_15078b6e742b8cb149717e0a89d4457b);
+            
+        
+
+        marker_bf284b26f76adfbb262d40e23321f707.bindPopup(popup_d652a278d968ca3ce5de9c3f6d34f5ca)
+        ;
+
+        
+    
+    
+                marker_bf284b26f76adfbb262d40e23321f707.setIcon(icon_62057c5269654b2b96c99355eb9c2898);
+            
+    
+            var marker_f54eede33a8f14b4904026c3752d24d6 = L.marker(
+                [-22.44, -68.92000000000002],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_89edb61d857652da6a89076c3a2a4a8f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_b7adab0c5b651c3295c2cdb8943790b2 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_c5685ceca5d760a98145908db18153ad = $(`<div id="html_c5685ceca5d760a98145908db18153ad" style="width: 100.0%; height: 100.0%;">         <b>DMHC</b><br>         <b>Formato:</b> RTCM 3.4<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_b7adab0c5b651c3295c2cdb8943790b2.setContent(html_c5685ceca5d760a98145908db18153ad);
+            
+        
+
+        marker_f54eede33a8f14b4904026c3752d24d6.bindPopup(popup_b7adab0c5b651c3295c2cdb8943790b2)
+        ;
+
+        
+    
+    
+                marker_f54eede33a8f14b4904026c3752d24d6.setIcon(icon_89edb61d857652da6a89076c3a2a4a8f);
+            
+    
+            var marker_4713a2b090dc43f7819fef458c24b108 = L.marker(
+                [-36.84, -73.01999999999998],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_056101d7d12d62e3ab37fa949bf2bf7e = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_992f5dd411b6ac406447b5ccf9b32768 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_a7e2b0e589cc726d4f9f7e2460b02191 = $(`<div id="html_a7e2b0e589cc726d4f9f7e2460b02191" style="width: 100.0%; height: 100.0%;">         <b>CONZ</b><br>         <b>Formato:</b> RTCM 3.4<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_992f5dd411b6ac406447b5ccf9b32768.setContent(html_a7e2b0e589cc726d4f9f7e2460b02191);
+            
+        
+
+        marker_4713a2b090dc43f7819fef458c24b108.bindPopup(popup_992f5dd411b6ac406447b5ccf9b32768)
+        ;
+
+        
+    
+    
+                marker_4713a2b090dc43f7819fef458c24b108.setIcon(icon_056101d7d12d62e3ab37fa949bf2bf7e);
+            
+    
+            var marker_c7d3129cbaf06cb21099129406490f8f = L.marker(
+                [-32.93, -71.49000000000001],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_60a461f34427bc95ced60f45240e1724 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2b4e8427586241d36ae20978433afc9c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4d592f28c8f9fac18866a200daed088a = $(`<div id="html_4d592f28c8f9fac18866a200daed088a" style="width: 100.0%; height: 100.0%;">         <b>CNCN</b><br>         <b>Formato:</b> RTCM 3.4<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_2b4e8427586241d36ae20978433afc9c.setContent(html_4d592f28c8f9fac18866a200daed088a);
+            
+        
+
+        marker_c7d3129cbaf06cb21099129406490f8f.bindPopup(popup_2b4e8427586241d36ae20978433afc9c)
+        ;
+
+        
+    
+    
+                marker_c7d3129cbaf06cb21099129406490f8f.setIcon(icon_60a461f34427bc95ced60f45240e1724);
+            
+    
+            var marker_41722f368e22132329af47651400deba = L.marker(
+                [-41.46, -72.95999999999998],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_67cbc8f4d12e5df28b2614d7836098fc = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c21755387b5692f27cfef1c4b168db91 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_3e433901124669ae6ff906d102c055ca = $(`<div id="html_3e433901124669ae6ff906d102c055ca" style="width: 100.0%; height: 100.0%;">         <b>PTMT</b><br>         <b>Formato:</b> RTCM 3.4<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_c21755387b5692f27cfef1c4b168db91.setContent(html_3e433901124669ae6ff906d102c055ca);
+            
+        
+
+        marker_41722f368e22132329af47651400deba.bindPopup(popup_c21755387b5692f27cfef1c4b168db91)
+        ;
+
+        
+    
+    
+                marker_41722f368e22132329af47651400deba.setIcon(icon_67cbc8f4d12e5df28b2614d7836098fc);
+            
+    
+            var marker_7bbaf89340ed210f2325c7f857be0264 = L.marker(
+                [-33.43, -70.57999999999998],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_180d7caa8cf739df64ff099610054f54 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2b2531d479754e35770857a1470e0ee7 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_40bdbfac7476c6df22afcce6714213e9 = $(`<div id="html_40bdbfac7476c6df22afcce6714213e9" style="width: 100.0%; height: 100.0%;">         <b>SCOL</b><br>         <b>Formato:</b> RTCM 3.4<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_2b2531d479754e35770857a1470e0ee7.setContent(html_40bdbfac7476c6df22afcce6714213e9);
+            
+        
+
+        marker_7bbaf89340ed210f2325c7f857be0264.bindPopup(popup_2b2531d479754e35770857a1470e0ee7)
+        ;
+
+        
+    
+    
+                marker_7bbaf89340ed210f2325c7f857be0264.setIcon(icon_180d7caa8cf739df64ff099610054f54);
+            
+    
+            var marker_9e179d912c40732a05e38909e29fa037 = L.marker(
+                [-33.44, -70.61000000000001],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_114a27cb1d1cdc33927394c4fe205a0c = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_f0be3eaa78211941a5d69f6226e67cfd = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f872ee382b3b958354361a2de411ae54 = $(`<div id="html_f872ee382b3b958354361a2de411ae54" style="width: 100.0%; height: 100.0%;">         <b>SNTI</b><br>         <b>Formato:</b> RTCM 3.4<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_f0be3eaa78211941a5d69f6226e67cfd.setContent(html_f872ee382b3b958354361a2de411ae54);
+            
+        
+
+        marker_9e179d912c40732a05e38909e29fa037.bindPopup(popup_f0be3eaa78211941a5d69f6226e67cfd)
+        ;
+
+        
+    
+    
+                marker_9e179d912c40732a05e38909e29fa037.setIcon(icon_114a27cb1d1cdc33927394c4fe205a0c);
+            
+    
+            var marker_2f55f3b19483dc1440690ee331d278bd = L.marker(
+                [-35.41, -71.63999999999999],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_6b1e8b4cedcb15e8025791fee8db91ec = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d92dfcb4cbffdf1584eadf0c042227ea = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_7cc2394e551fd7ffa0bdaede805ca6a9 = $(`<div id="html_7cc2394e551fd7ffa0bdaede805ca6a9" style="width: 100.0%; height: 100.0%;">         <b>TALC</b><br>         <b>Formato:</b> RTCM 3.4<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_d92dfcb4cbffdf1584eadf0c042227ea.setContent(html_7cc2394e551fd7ffa0bdaede805ca6a9);
+            
+        
+
+        marker_2f55f3b19483dc1440690ee331d278bd.bindPopup(popup_d92dfcb4cbffdf1584eadf0c042227ea)
+        ;
+
+        
+    
+    
+                marker_2f55f3b19483dc1440690ee331d278bd.setIcon(icon_6b1e8b4cedcb15e8025791fee8db91ec);
+            
+    
+            var marker_2a3b779f4dd6274b29e8a2ff289aa488 = L.marker(
+                [-39.84, -73.20999999999998],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_f1438cc7cdeb41dc5e94208e67b2152b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_a767b50a727a1de1d3ed9284d79836cf = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_671e028cff01ef073738887c0ee99134 = $(`<div id="html_671e028cff01ef073738887c0ee99134" style="width: 100.0%; height: 100.0%;">         <b>VLDV</b><br>         <b>Formato:</b> RTCM 3.4<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> Geocom         </div>`)[0];
+                popup_a767b50a727a1de1d3ed9284d79836cf.setContent(html_671e028cff01ef073738887c0ee99134);
+            
+        
+
+        marker_2a3b779f4dd6274b29e8a2ff289aa488.bindPopup(popup_a767b50a727a1de1d3ed9284d79836cf)
+        ;
+
+        
+    
+    
+                marker_2a3b779f4dd6274b29e8a2ff289aa488.setIcon(icon_f1438cc7cdeb41dc5e94208e67b2152b);
+            
+    
+            var marker_a8f1646a1efa9d1c715a3a6b5501d084 = L.marker(
+                [-18.49, -70.30000000000001],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_b9ca1b6d493c6557a4eaa690c41dfabe = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_9260760134796fea742a4a23b5e30e44 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_78a581948fd137fbb844a0497faedf05 = $(`<div id="html_78a581948fd137fbb844a0497faedf05" style="width: 100.0%; height: 100.0%;">         <b>UTAR</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> MSM5<br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_9260760134796fea742a4a23b5e30e44.setContent(html_78a581948fd137fbb844a0497faedf05);
+            
+        
+
+        marker_a8f1646a1efa9d1c715a3a6b5501d084.bindPopup(popup_9260760134796fea742a4a23b5e30e44)
+        ;
+
+        
+    
+    
+                marker_a8f1646a1efa9d1c715a3a6b5501d084.setIcon(icon_b9ca1b6d493c6557a4eaa690c41dfabe);
+            
+    
+            var marker_2a689eca7b0873c35142057146ddd1cd = L.marker(
+                [-37.47, -72.33999999999997],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_bc0ceaff72d0be70cc041aa85926e28c = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_69c64b0e6be329faff8e50e5520b16ac = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_87aabf8aaad1bc1db65cf7d6d55263f8 = $(`<div id="html_87aabf8aaad1bc1db65cf7d6d55263f8" style="width: 100.0%; height: 100.0%;">         <b>UDEC</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> <br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_69c64b0e6be329faff8e50e5520b16ac.setContent(html_87aabf8aaad1bc1db65cf7d6d55263f8);
+            
+        
+
+        marker_2a689eca7b0873c35142057146ddd1cd.bindPopup(popup_69c64b0e6be329faff8e50e5520b16ac)
+        ;
+
+        
+    
+    
+                marker_2a689eca7b0873c35142057146ddd1cd.setIcon(icon_bc0ceaff72d0be70cc041aa85926e28c);
+            
+    
+            var marker_f89742f562281ab6690f043dd3411ebc = L.marker(
+                [-22.75, -68.44999999999999],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_cdd1641d1a83c8ac928589e903309060 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_41652b20fc589225653a0645cbbcd0fe = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d3004b68b5d38c1ba0e7078a1c72206e = $(`<div id="html_d3004b68b5d38c1ba0e7078a1c72206e" style="width: 100.0%; height: 100.0%;">         <b>CBAA</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> <br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_41652b20fc589225653a0645cbbcd0fe.setContent(html_d3004b68b5d38c1ba0e7078a1c72206e);
+            
+        
+
+        marker_f89742f562281ab6690f043dd3411ebc.bindPopup(popup_41652b20fc589225653a0645cbbcd0fe)
+        ;
+
+        
+    
+    
+                marker_f89742f562281ab6690f043dd3411ebc.setIcon(icon_cdd1641d1a83c8ac928589e903309060);
+            
+    
+            var marker_0d53a428b2be8c4130042e9d43215204 = L.marker(
+                [-33.99, -70.61000000000001],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_a6a35bb6b9d0cf545610788e679b32d4 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_69d9b889c9bf271ceed2d4245b0f0ab6 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_0b04df678a37e34bab5b1df0e70c3788 = $(`<div id="html_0b04df678a37e34bab5b1df0e70c3788" style="width: 100.0%; height: 100.0%;">         <b>CHDA</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> <br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_69d9b889c9bf271ceed2d4245b0f0ab6.setContent(html_0b04df678a37e34bab5b1df0e70c3788);
+            
+        
+
+        marker_0d53a428b2be8c4130042e9d43215204.bindPopup(popup_69d9b889c9bf271ceed2d4245b0f0ab6)
+        ;
+
+        
+    
+    
+                marker_0d53a428b2be8c4130042e9d43215204.setIcon(icon_a6a35bb6b9d0cf545610788e679b32d4);
+            
+    
+            var marker_da6f0b3180a289c1e12e6688b7c304ce = L.marker(
+                [-52.78, -69.22000000000003],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_1a8f2294bb351b92a74671f1ac0f18c1 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c1c5ae06a62142f685cc2444c45a3edd = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d3c44d914c83101b1a568b8852094c15 = $(`<div id="html_d3c44d914c83101b1a568b8852094c15" style="width: 100.0%; height: 100.0%;">         <b>CSOM</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> <br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_c1c5ae06a62142f685cc2444c45a3edd.setContent(html_d3c44d914c83101b1a568b8852094c15);
+            
+        
+
+        marker_da6f0b3180a289c1e12e6688b7c304ce.bindPopup(popup_c1c5ae06a62142f685cc2444c45a3edd)
+        ;
+
+        
+    
+    
+                marker_da6f0b3180a289c1e12e6688b7c304ce.setIcon(icon_1a8f2294bb351b92a74671f1ac0f18c1);
+            
+    
+            var marker_22ce49a672eddab7f1e9e9a91b2d9f56 = L.marker(
+                [-20.99, -70.18],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_98f9733823c34de8470e8ba879a5b094 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_ff4ead389df20e811531f7c3bef8f90b = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_acc4fd9231666195d64eba75f56e2d25 = $(`<div id="html_acc4fd9231666195d64eba75f56e2d25" style="width: 100.0%; height: 100.0%;">         <b>GTA1</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> MSM4<br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_ff4ead389df20e811531f7c3bef8f90b.setContent(html_acc4fd9231666195d64eba75f56e2d25);
+            
+        
+
+        marker_22ce49a672eddab7f1e9e9a91b2d9f56.bindPopup(popup_ff4ead389df20e811531f7c3bef8f90b)
+        ;
+
+        
+    
+    
+                marker_22ce49a672eddab7f1e9e9a91b2d9f56.setIcon(icon_98f9733823c34de8470e8ba879a5b094);
+            
+    
+            var marker_d2834d330ef58f41c691d4dc56663973 = L.marker(
+                [-26.84, -69.13],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_3a34e685b4a3a8f85e3cdc6ab6a99363 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_5a88c99696038ae6e1b06bc1174dd6f5 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_572727d8be363b1a566b86ed2cf609a6 = $(`<div id="html_572727d8be363b1a566b86ed2cf609a6" style="width: 100.0%; height: 100.0%;">         <b>MRCG</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> MSM4<br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_5a88c99696038ae6e1b06bc1174dd6f5.setContent(html_572727d8be363b1a566b86ed2cf609a6);
+            
+        
+
+        marker_d2834d330ef58f41c691d4dc56663973.bindPopup(popup_5a88c99696038ae6e1b06bc1174dd6f5)
+        ;
+
+        
+    
+    
+                marker_d2834d330ef58f41c691d4dc56663973.setIcon(icon_3a34e685b4a3a8f85e3cdc6ab6a99363);
+            
+    
+            var marker_8252b793ea2d46a4fe1f44a1968b3ad7 = L.marker(
+                [-43.19, -71.85000000000002],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_655604ed574b62392434173371e0a6dc = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_361c4b08e9ac896dc031d4c9476949b2 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4b10a623395b99fc4d93b4aae020dd9e = $(`<div id="html_4b10a623395b99fc4d93b4aae020dd9e" style="width: 100.0%; height: 100.0%;">         <b>FUTF</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> <br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_361c4b08e9ac896dc031d4c9476949b2.setContent(html_4b10a623395b99fc4d93b4aae020dd9e);
+            
+        
+
+        marker_8252b793ea2d46a4fe1f44a1968b3ad7.bindPopup(popup_361c4b08e9ac896dc031d4c9476949b2)
+        ;
+
+        
+    
+    
+                marker_8252b793ea2d46a4fe1f44a1968b3ad7.setIcon(icon_655604ed574b62392434173371e0a6dc);
+            
+    
+            var marker_d6f897ad160b152761a14a5366ac1e0f = L.marker(
+                [-37.68, -73.64999999999998],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_feb0cac433851c072f864c95ef434fd5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_46a3cfc6e9da96dc3dd3eabeeb8864ba = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_96a4342d0abbd1294db7431ee38b228b = $(`<div id="html_96a4342d0abbd1294db7431ee38b228b" style="width: 100.0%; height: 100.0%;">         <b>PECL</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> MSM4<br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_46a3cfc6e9da96dc3dd3eabeeb8864ba.setContent(html_96a4342d0abbd1294db7431ee38b228b);
+            
+        
+
+        marker_d6f897ad160b152761a14a5366ac1e0f.bindPopup(popup_46a3cfc6e9da96dc3dd3eabeeb8864ba)
+        ;
+
+        
+    
+    
+                marker_d6f897ad160b152761a14a5366ac1e0f.setIcon(icon_feb0cac433851c072f864c95ef434fd5);
+            
+    
+            var marker_88a480b00f2297eb0d5f3270e7e47e4c = L.marker(
+                [-18.45, -70.11000000000001],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_46a789d62ac490ff77c427f2fd673746 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1c0b6aed53051b0bafb7ddc7b4dac079 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_6bf51d5a73ca531e2f491f2df56997b0 = $(`<div id="html_6bf51d5a73ca531e2f491f2df56997b0" style="width: 100.0%; height: 100.0%;">         <b>PCCL</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> MSM4<br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_1c0b6aed53051b0bafb7ddc7b4dac079.setContent(html_6bf51d5a73ca531e2f491f2df56997b0);
+            
+        
+
+        marker_88a480b00f2297eb0d5f3270e7e47e4c.bindPopup(popup_1c0b6aed53051b0bafb7ddc7b4dac079)
+        ;
+
+        
+    
+    
+                marker_88a480b00f2297eb0d5f3270e7e47e4c.setIcon(icon_46a789d62ac490ff77c427f2fd673746);
+            
+    
+            var marker_0940586ade30a2e2e97dfadd369e63ca = L.marker(
+                [-30.84, -70.69],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_fa1f74537287ab7a8d2222dab35862f3 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_7a78dc9b034c55f2343398d75a6261d8 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f0355c211e8c4949030bfb1a8dcdc4c0 = $(`<div id="html_f0355c211e8c4949030bfb1a8dcdc4c0" style="width: 100.0%; height: 100.0%;">         <b>PEDR</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> <br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_7a78dc9b034c55f2343398d75a6261d8.setContent(html_f0355c211e8c4949030bfb1a8dcdc4c0);
+            
+        
+
+        marker_0940586ade30a2e2e97dfadd369e63ca.bindPopup(popup_7a78dc9b034c55f2343398d75a6261d8)
+        ;
+
+        
+    
+    
+                marker_0940586ade30a2e2e97dfadd369e63ca.setIcon(icon_fa1f74537287ab7a8d2222dab35862f3);
+            
+    
+            var marker_74e17225007aed3eff9d95de83cfba0f = L.marker(
+                [-41.14, -72.39999999999998],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_4f19b03720bf53ef76d2d52183293ebc = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_8e0b646e6bbdb3dbf58a7965b9663330 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_bef516bff194725b9f26c09dcc8de077 = $(`<div id="html_bef516bff194725b9f26c09dcc8de077" style="width: 100.0%; height: 100.0%;">         <b>PTRO</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> MSM4<br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_8e0b646e6bbdb3dbf58a7965b9663330.setContent(html_bef516bff194725b9f26c09dcc8de077);
+            
+        
+
+        marker_74e17225007aed3eff9d95de83cfba0f.bindPopup(popup_8e0b646e6bbdb3dbf58a7965b9663330)
+        ;
+
+        
+    
+    
+                marker_74e17225007aed3eff9d95de83cfba0f.setIcon(icon_4f19b03720bf53ef76d2d52183293ebc);
+            
+    
+            var marker_8d33b549690c954a277e2e647a197577 = L.marker(
+                [-53.16, -71.05000000000001],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_df9a80dda0618b0eb8010aee4206b938 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_57eccfd7cd1e6b6b8901f9ad039b3bbf = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_b0ab9869d1f7c76f55e649c17290aae7 = $(`<div id="html_b0ab9869d1f7c76f55e649c17290aae7" style="width: 100.0%; height: 100.0%;">         <b>PTAR</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> MSM4<br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_57eccfd7cd1e6b6b8901f9ad039b3bbf.setContent(html_b0ab9869d1f7c76f55e649c17290aae7);
+            
+        
+
+        marker_8d33b549690c954a277e2e647a197577.bindPopup(popup_57eccfd7cd1e6b6b8901f9ad039b3bbf)
+        ;
+
+        
+    
+    
+                marker_8d33b549690c954a277e2e647a197577.setIcon(icon_df9a80dda0618b0eb8010aee4206b938);
+            
+    
+            var marker_909b18a1d3c01e7940909e9eb0fea0dd = L.marker(
+                [-37.15, -73.57999999999998],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_1163402b01430a007877bb04dfba72b1 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_89bba323d96d98b81afe0214e7a8c1a8 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_66d49a754f729610574a385560efc50a = $(`<div id="html_66d49a754f729610574a385560efc50a" style="width: 100.0%; height: 100.0%;">         <b>PLVP</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> MSM4<br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_89bba323d96d98b81afe0214e7a8c1a8.setContent(html_66d49a754f729610574a385560efc50a);
+            
+        
+
+        marker_909b18a1d3c01e7940909e9eb0fea0dd.bindPopup(popup_89bba323d96d98b81afe0214e7a8c1a8)
+        ;
+
+        
+    
+    
+                marker_909b18a1d3c01e7940909e9eb0fea0dd.setIcon(icon_1163402b01430a007877bb04dfba72b1);
+            
+    
+            var marker_628a08c6b6fce61fb78d3a1658b11940 = L.marker(
+                [-27.59, -70.31],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_cc7fe33735f29a79f53675d1099d4383 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_db80e18bee3380d6a20947be693a0fa3 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_73d86ab9826b5b15f2136be76fd36154 = $(`<div id="html_73d86ab9826b5b15f2136be76fd36154" style="width: 100.0%; height: 100.0%;">         <b>TAMR</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> MSM4<br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_db80e18bee3380d6a20947be693a0fa3.setContent(html_73d86ab9826b5b15f2136be76fd36154);
+            
+        
+
+        marker_628a08c6b6fce61fb78d3a1658b11940.bindPopup(popup_db80e18bee3380d6a20947be693a0fa3)
+        ;
+
+        
+    
+    
+                marker_628a08c6b6fce61fb78d3a1658b11940.setIcon(icon_cc7fe33735f29a79f53675d1099d4383);
+            
+    
+            var marker_7f95607f1dc601c3553c01b3ea226392 = L.marker(
+                [-34.79, -70.77999999999997],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_8a0dea5b2a9d8eca3c677418d0e486c1 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_bcb39fb83634250a514df2935629a45e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_da44ccbb20530f3153e9d86123c9cce6 = $(`<div id="html_da44ccbb20530f3153e9d86123c9cce6" style="width: 100.0%; height: 100.0%;">         <b>SBLL</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> MSM4<br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_bcb39fb83634250a514df2935629a45e.setContent(html_da44ccbb20530f3153e9d86123c9cce6);
+            
+        
+
+        marker_7f95607f1dc601c3553c01b3ea226392.bindPopup(popup_bcb39fb83634250a514df2935629a45e)
+        ;
+
+        
+    
+    
+                marker_7f95607f1dc601c3553c01b3ea226392.setIcon(icon_8a0dea5b2a9d8eca3c677418d0e486c1);
+            
+    
+            var marker_0d18e1ca2246b0e1484d8c3e911de5b5 = L.marker(
+                [-32.98, -71.00999999999999],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_0d63bc616f723946d12a36787ed86f7e = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_566ace0dafbde8e7f1bafa22ebdcaa57 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ed551035251f619efb8429b8aa3239c9 = $(`<div id="html_ed551035251f619efb8429b8aa3239c9" style="width: 100.0%; height: 100.0%;">         <b>ROB1</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> MSM4<br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_566ace0dafbde8e7f1bafa22ebdcaa57.setContent(html_ed551035251f619efb8429b8aa3239c9);
+            
+        
+
+        marker_0d18e1ca2246b0e1484d8c3e911de5b5.bindPopup(popup_566ace0dafbde8e7f1bafa22ebdcaa57)
+        ;
+
+        
+    
+    
+                marker_0d18e1ca2246b0e1484d8c3e911de5b5.setIcon(icon_0d63bc616f723946d12a36787ed86f7e);
+            
+    
+            var marker_6412bf9872fbfa418f89e721c6e29f26 = L.marker(
+                [-33.02, -71.63999999999999],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_bc67c58685963ac8d2b709c33bdbcf8c = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_4d02c626bedcd1adef875690c65cb6f8 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4e032012c42d4207b896b87dc9e80df0 = $(`<div id="html_4e032012c42d4207b896b87dc9e80df0" style="width: 100.0%; height: 100.0%;">         <b>TRPD</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> <br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_4d02c626bedcd1adef875690c65cb6f8.setContent(html_4e032012c42d4207b896b87dc9e80df0);
+            
+        
+
+        marker_6412bf9872fbfa418f89e721c6e29f26.bindPopup(popup_4d02c626bedcd1adef875690c65cb6f8)
+        ;
+
+        
+    
+    
+                marker_6412bf9872fbfa418f89e721c6e29f26.setIcon(icon_bc67c58685963ac8d2b709c33bdbcf8c);
+            
+    
+            var marker_6fff4bfe456571952d8413cef99fdb4f = L.marker(
+                [-46.48, -73.19],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_55a702b0e84a8e4131b0053725bee044 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_a8dc7fc7bfe11291c5807d8272c70ade = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_078076ae9105e325cc960a9d5cb72dce = $(`<div id="html_078076ae9105e325cc960a9d5cb72dce" style="width: 100.0%; height: 100.0%;">         <b>XPLO</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> <br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_a8dc7fc7bfe11291c5807d8272c70ade.setContent(html_078076ae9105e325cc960a9d5cb72dce);
+            
+        
+
+        marker_6fff4bfe456571952d8413cef99fdb4f.bindPopup(popup_a8dc7fc7bfe11291c5807d8272c70ade)
+        ;
+
+        
+    
+    
+                marker_6fff4bfe456571952d8413cef99fdb4f.setIcon(icon_55a702b0e84a8e4131b0053725bee044);
+            
+    
+            var marker_0a6c1e858e5c50306b6877b88235cbe3 = L.marker(
+                [-33.46, -70.66000000000003],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_b8db65a3a9b6a01134093750c0f53433 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_5e96b3bf698dd3bb98c37a72e4c7fbb4 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_c9c1978efa280b27b70f05b1740ca522 = $(`<div id="html_c9c1978efa280b27b70f05b1740ca522" style="width: 100.0%; height: 100.0%;">         <b>CCSN</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> <br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_5e96b3bf698dd3bb98c37a72e4c7fbb4.setContent(html_c9c1978efa280b27b70f05b1740ca522);
+            
+        
+
+        marker_0a6c1e858e5c50306b6877b88235cbe3.bindPopup(popup_5e96b3bf698dd3bb98c37a72e4c7fbb4)
+        ;
+
+        
+    
+    
+                marker_0a6c1e858e5c50306b6877b88235cbe3.setIcon(icon_b8db65a3a9b6a01134093750c0f53433);
+            
+    
+            var marker_7306725d0ac42b3caec525e4c5066af5 = L.marker(
+                [-33.46, -70.66000000000003],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_d6aaf981ef01b3c3232c5b1f60043a89 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_84a2200d7191f3be81ad4680db54e2d6 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d2bcdfb07aceec34b7d46236143aa3a1 = $(`<div id="html_d2bcdfb07aceec34b7d46236143aa3a1" style="width: 100.0%; height: 100.0%;">         <b>DGF1</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> <br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_84a2200d7191f3be81ad4680db54e2d6.setContent(html_d2bcdfb07aceec34b7d46236143aa3a1);
+            
+        
+
+        marker_7306725d0ac42b3caec525e4c5066af5.bindPopup(popup_84a2200d7191f3be81ad4680db54e2d6)
+        ;
+
+        
+    
+    
+                marker_7306725d0ac42b3caec525e4c5066af5.setIcon(icon_d6aaf981ef01b3c3232c5b1f60043a89);
+            
+    
+            var marker_24bfbf5d9624cb4575c558d6bff987d9 = L.marker(
+                [-33.45, -70.68],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_a361586a9b102af8b2e5d96813a778c5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_121c88cf8fac600e138b10828a1b2bde = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_bfc9d3c85127e23b5219a98703bd1510 = $(`<div id="html_bfc9d3c85127e23b5219a98703bd1510" style="width: 100.0%; height: 100.0%;">         <b>USCL</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> <br>         <b>Sistema:</b> GPS+GLO+GAL+BDS+QZS<br>         <b>Network:</b> IGS         </div>`)[0];
+                popup_121c88cf8fac600e138b10828a1b2bde.setContent(html_bfc9d3c85127e23b5219a98703bd1510);
+            
+        
+
+        marker_24bfbf5d9624cb4575c558d6bff987d9.bindPopup(popup_121c88cf8fac600e138b10828a1b2bde)
+        ;
+
+        
+    
+    
+                marker_24bfbf5d9624cb4575c558d6bff987d9.setIcon(icon_a361586a9b102af8b2e5d96813a778c5);
+            
+    
+            var marker_cfa7e83df3abc759351037bca4a9c03c = L.marker(
+                [-33.49, -70.50999999999999],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_bf49169e1df7fa62c325de577d7088a3 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_db08a37266f84699bd08b96d59b3297e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_fe3c9dba86979060483639600d9d372f = $(`<div id="html_fe3c9dba86979060483639600d9d372f" style="width: 100.0%; height: 100.0%;">         <b>UAIB</b><br>         <b>Formato:</b> RTCM 3.0<br>         <b>Detalles:</b> <br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> CSN         </div>`)[0];
+                popup_db08a37266f84699bd08b96d59b3297e.setContent(html_fe3c9dba86979060483639600d9d372f);
+            
+        
+
+        marker_cfa7e83df3abc759351037bca4a9c03c.bindPopup(popup_db08a37266f84699bd08b96d59b3297e)
+        ;
+
+        
+    
+    
+                marker_cfa7e83df3abc759351037bca4a9c03c.setIcon(icon_bf49169e1df7fa62c325de577d7088a3);
+            
+    
+            var marker_f70480f09db90c5fa4d623bca2dafc5c = L.marker(
+                [-33.15, -70.67000000000002],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_1bd287c6b6a9d3e9047deda074482a22 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_67208089262ab061bea77e2a4a3bc9f5 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_7801f7374d8a2eafbf73116f04118c61 = $(`<div id="html_7801f7374d8a2eafbf73116f04118c61" style="width: 100.0%; height: 100.0%;">         <b>SANT</b><br>         <b>Formato:</b> RTCM 3.2<br>         <b>Detalles:</b> MSM6<br>         <b>Sistema:</b> IGS<br>         <b>Network:</b> JPL         </div>`)[0];
+                popup_67208089262ab061bea77e2a4a3bc9f5.setContent(html_7801f7374d8a2eafbf73116f04118c61);
+            
+        
+
+        marker_f70480f09db90c5fa4d623bca2dafc5c.bindPopup(popup_67208089262ab061bea77e2a4a3bc9f5)
+        ;
+
+        
+    
+    
+                marker_f70480f09db90c5fa4d623bca2dafc5c.setIcon(icon_1bd287c6b6a9d3e9047deda074482a22);
+            
+    
+            var marker_89f31e4b7c455d8673e8c30488b8ee4d = L.marker(
+                [-37.34, -71.52999999999997],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_c5b27d6b330e75eb0ba372bbe02d531d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_cd4789219fffe4ad70e27de3c19e7858 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_9c611e668c5c1ff9617c96d0459271a0 = $(`<div id="html_9c611e668c5c1ff9617c96d0459271a0" style="width: 100.0%; height: 100.0%;">         <b>ANTC</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> <br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> IGS         </div>`)[0];
+                popup_cd4789219fffe4ad70e27de3c19e7858.setContent(html_9c611e668c5c1ff9617c96d0459271a0);
+            
+        
+
+        marker_89f31e4b7c455d8673e8c30488b8ee4d.bindPopup(popup_cd4789219fffe4ad70e27de3c19e7858)
+        ;
+
+        
+    
+    
+                marker_89f31e4b7c455d8673e8c30488b8ee4d.setIcon(icon_c5b27d6b330e75eb0ba372bbe02d531d);
+            
+    
+            var marker_af0fcdb5feee5e7e7d2e115249d9e858 = L.marker(
+                [-23.7, -70.42000000000002],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_c21dd33497afc3407fb7f80e28d3dacf = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_165df8f5069107c5195d63dc6a5b5107 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_9499d86a0701174f9e996d80a2db0f8e = $(`<div id="html_9499d86a0701174f9e996d80a2db0f8e" style="width: 100.0%; height: 100.0%;">         <b>ANTF</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> <br>         <b>Sistema:</b> GPS+GLO+GAL+BDS<br>         <b>Network:</b> IGS         </div>`)[0];
+                popup_165df8f5069107c5195d63dc6a5b5107.setContent(html_9499d86a0701174f9e996d80a2db0f8e);
+            
+        
+
+        marker_af0fcdb5feee5e7e7d2e115249d9e858.bindPopup(popup_165df8f5069107c5195d63dc6a5b5107)
+        ;
+
+        
+    
+    
+                marker_af0fcdb5feee5e7e7d2e115249d9e858.setIcon(icon_c21dd33497afc3407fb7f80e28d3dacf);
+            
+    
+            var marker_605cc940884ab426082573eaef78c7a3 = L.marker(
+                [-20.27, -70.13],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_45b146c627365061c7a3ac9d257af302 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_8b5b4884a2a8438dd3e0729900c360d0 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_db3bc0ae8617e00f631ff9f3f19c6445 = $(`<div id="html_db3bc0ae8617e00f631ff9f3f19c6445" style="width: 100.0%; height: 100.0%;">         <b>IQQE</b><br>         <b>Formato:</b> RTCM 3.1<br>         <b>Detalles:</b> <br>         <b>Sistema:</b> GPS+GLO<br>         <b>Network:</b> IGS         </div>`)[0];
+                popup_8b5b4884a2a8438dd3e0729900c360d0.setContent(html_db3bc0ae8617e00f631ff9f3f19c6445);
+            
+        
+
+        marker_605cc940884ab426082573eaef78c7a3.bindPopup(popup_8b5b4884a2a8438dd3e0729900c360d0)
+        ;
+
+        
+    
+    
+                marker_605cc940884ab426082573eaef78c7a3.setIcon(icon_45b146c627365061c7a3ac9d257af302);
+            
+    
+            var marker_f699bd03ab6b3f3349053281d61ea9d0 = L.marker(
+                [-39.81, -73.25],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_385cc52c9fe1d18ca12117c625898dad = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_003697fa0c61b9b0345de96d5cec19b0 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_07899cf33f681dcb0419cb8baee46b9e = $(`<div id="html_07899cf33f681dcb0419cb8baee46b9e" style="width: 100.0%; height: 100.0%;">         <b>TEJA</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> <br>         <b>Sistema:</b> GPS+GLO+GAL+BDS<br>         <b>Network:</b> IGS         </div>`)[0];
+                popup_003697fa0c61b9b0345de96d5cec19b0.setContent(html_07899cf33f681dcb0419cb8baee46b9e);
+            
+        
+
+        marker_f699bd03ab6b3f3349053281d61ea9d0.bindPopup(popup_003697fa0c61b9b0345de96d5cec19b0)
+        ;
+
+        
+    
+    
+                marker_f699bd03ab6b3f3349053281d61ea9d0.setIcon(icon_385cc52c9fe1d18ca12117c625898dad);
+            
+    
+            var marker_cdafad8949a435bf37be409bd4e2ba46 = L.marker(
+                [-27.39, -70.32],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_2a4db85fad2ac0ce7c16df196821e698 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_22f6f98cc6be79cddf1f4fe45416e3df = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f6ae808536bf8a6a2c254dea33fbf718 = $(`<div id="html_f6ae808536bf8a6a2c254dea33fbf718" style="width: 100.0%; height: 100.0%;">         <b>CPPO</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM4<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS<br>         <b>Network:</b> GA         </div>`)[0];
+                popup_22f6f98cc6be79cddf1f4fe45416e3df.setContent(html_f6ae808536bf8a6a2c254dea33fbf718);
+            
+        
+
+        marker_cdafad8949a435bf37be409bd4e2ba46.bindPopup(popup_22f6f98cc6be79cddf1f4fe45416e3df)
+        ;
+
+        
+    
+    
+                marker_cdafad8949a435bf37be409bd4e2ba46.setIcon(icon_2a4db85fad2ac0ce7c16df196821e698);
+            
+    
+            var marker_e3bb2cddff73abbbb131cf1846178fcb = L.marker(
+                [-40.9, -72.41000000000003],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_3ece509f81b526754bb274b796e72559 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_7d0fbe5915a58e93d1bc3875e3ebebce = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d0bfa86f54fb88202ac2dc8f3998857b = $(`<div id="html_d0bfa86f54fb88202ac2dc8f3998857b" style="width: 100.0%; height: 100.0%;">         <b>OSOR</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM4<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS<br>         <b>Network:</b> GA         </div>`)[0];
+                popup_7d0fbe5915a58e93d1bc3875e3ebebce.setContent(html_d0bfa86f54fb88202ac2dc8f3998857b);
+            
+        
+
+        marker_e3bb2cddff73abbbb131cf1846178fcb.bindPopup(popup_7d0fbe5915a58e93d1bc3875e3ebebce)
+        ;
+
+        
+    
+    
+                marker_e3bb2cddff73abbbb131cf1846178fcb.setIcon(icon_3ece509f81b526754bb274b796e72559);
+            
+    
+            var marker_9ba645fad3a4e50cb4f5934fb7f4af0b = L.marker(
+                [-23.66, -70.38999999999999],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_05430c0e9f1ffbe2ab6a5266006b80ca = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_39aa8a3da6f9e9a1fba66d89713b3126 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d0aff21aba8ad0465f1c977d51f00506 = $(`<div id="html_d0aff21aba8ad0465f1c977d51f00506" style="width: 100.0%; height: 100.0%;">         <b>ANTO</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM4<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS<br>         <b>Network:</b> GA         </div>`)[0];
+                popup_39aa8a3da6f9e9a1fba66d89713b3126.setContent(html_d0aff21aba8ad0465f1c977d51f00506);
+            
+        
+
+        marker_9ba645fad3a4e50cb4f5934fb7f4af0b.bindPopup(popup_39aa8a3da6f9e9a1fba66d89713b3126)
+        ;
+
+        
+    
+    
+                marker_9ba645fad3a4e50cb4f5934fb7f4af0b.setIcon(icon_05430c0e9f1ffbe2ab6a5266006b80ca);
+            
+    
+            var marker_3ba73596a9c54c6887084333d2a870f3 = L.marker(
+                [-32.84, -70.94],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_34f6ad184488527d819f9518f136847b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_26a56948011785854dff9aba90f4d274 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d9c44e1221b1cb455a7a67d2c7665702 = $(`<div id="html_d9c44e1221b1cb455a7a67d2c7665702" style="width: 100.0%; height: 100.0%;">         <b>LLAY</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM4<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS<br>         <b>Network:</b> GA         </div>`)[0];
+                popup_26a56948011785854dff9aba90f4d274.setContent(html_d9c44e1221b1cb455a7a67d2c7665702);
+            
+        
+
+        marker_3ba73596a9c54c6887084333d2a870f3.bindPopup(popup_26a56948011785854dff9aba90f4d274)
+        ;
+
+        
+    
+    
+                marker_3ba73596a9c54c6887084333d2a870f3.setIcon(icon_34f6ad184488527d819f9518f136847b);
+            
+    
+            var marker_b91a1c44519c66ead441f49823207906 = L.marker(
+                [-38.72, -72.66000000000003],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_c02eb32ef63e0a50a48c789742f1092f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_118a767f2882dd8e1b535990053f1769 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5775fb55d1dc0f9e2ffb8868633c45b0 = $(`<div id="html_5775fb55d1dc0f9e2ffb8868633c45b0" style="width: 100.0%; height: 100.0%;">         <b>TEMU</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM4<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS<br>         <b>Network:</b> GA         </div>`)[0];
+                popup_118a767f2882dd8e1b535990053f1769.setContent(html_5775fb55d1dc0f9e2ffb8868633c45b0);
+            
+        
+
+        marker_b91a1c44519c66ead441f49823207906.bindPopup(popup_118a767f2882dd8e1b535990053f1769)
+        ;
+
+        
+    
+    
+                marker_b91a1c44519c66ead441f49823207906.setIcon(icon_c02eb32ef63e0a50a48c789742f1092f);
+            
+    
+            var marker_37817d458df787d26daf6a8430871dc7 = L.marker(
+                [-22.44, -68.88],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_aa010cbeb2e28714f10b83c8f89e7b85 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_8b9f61b5e99fc9d78940f9c1f93041bb = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_bea932159476e7a012fc8b367560677c = $(`<div id="html_bea932159476e7a012fc8b367560677c" style="width: 100.0%; height: 100.0%;">         <b>CLMA</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM4<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS<br>         <b>Network:</b> GA         </div>`)[0];
+                popup_8b9f61b5e99fc9d78940f9c1f93041bb.setContent(html_bea932159476e7a012fc8b367560677c);
+            
+        
+
+        marker_37817d458df787d26daf6a8430871dc7.bindPopup(popup_8b9f61b5e99fc9d78940f9c1f93041bb)
+        ;
+
+        
+    
+    
+                marker_37817d458df787d26daf6a8430871dc7.setIcon(icon_aa010cbeb2e28714f10b83c8f89e7b85);
+            
+    
+            var marker_b59f3982f18370260e0b583799fed846 = L.marker(
+                [-33.12, -71.57999999999998],
+                {
+}
+            ).addTo(feature_group_01be318647ef818431627a21394e3786);
+        
+    
+            var icon_45a17a5d4660e386d12b7d9b4057547b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "satellite",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_8b8bd112dbe8e93131d965e07513d1e1 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_199d11b14fbf7c361eed07f224f3c047 = $(`<div id="html_199d11b14fbf7c361eed07f224f3c047" style="width: 100.0%; height: 100.0%;">         <b>VALP</b><br>         <b>Formato:</b> RTCM 3.3<br>         <b>Detalles:</b> MSM4<br>         <b>Sistema:</b> GPS+GLO+GAL+BDS<br>         <b>Network:</b> GA         </div>`)[0];
+                popup_8b8bd112dbe8e93131d965e07513d1e1.setContent(html_199d11b14fbf7c361eed07f224f3c047);
+            
+        
+
+        marker_b59f3982f18370260e0b583799fed846.bindPopup(popup_8b8bd112dbe8e93131d965e07513d1e1)
+        ;
+
+        
+    
+    
+                marker_b59f3982f18370260e0b583799fed846.setIcon(icon_45a17a5d4660e386d12b7d9b4057547b);
+            
+    
+            feature_group_01be318647ef818431627a21394e3786.addTo(map_10ea40ef89d31e3dd3fbc79b509ce151);
+        
+    
+            var feature_group_ca338ea596766a0a08eb5df4bd69e3fa = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var circle_8111c9cee007b48d7a7d91dcab213709 = L.circle(
+                [-33.67, -71.19999999999999],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_fe172e38a609e4869953e38155e4e481 = L.circle(
+                [-32.65, -71.16000000000003],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_95762ef552f68ddd683bf7147236ff65 = L.circle(
+                [-32.65, -71.12],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_5c2880e0fcf1ec41929e385eff175e0e = L.circle(
+                [-26.55, -70.32],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_6904bc34abb1ce52e15e583a10cd3e72 = L.circle(
+                [-33.63, -71.57],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_829dbcddbaa65745deb0b97284fdea0b = L.circle(
+                [-23.44, -69.51999999999998],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_64d1c18a861a13181a46947cfee3d381 = L.circle(
+                [-20.96, -68.67000000000002],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_1fe3f2115e581a92ce60d0844bb95349 = L.circle(
+                [-33.16, -70.82],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_3deddd16d90bb2a06a0183701522c9bf = L.circle(
+                [-20.06, -69.25999999999999],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_4d1531a19624858f6b6dc5832dac5338 = L.circle(
+                [-23.42, -70.06],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_d5feee5a2c22cccd59591d12945ad5c7 = L.circle(
+                [-27.52, -70.27999999999997],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_2a5fa4a693ea6780f6dfd061263a54d4 = L.circle(
+                [-24.21, -69.07],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_50ed8343f0a0de5adc9c8805d59daae0 = L.circle(
+                [-22.79, -69.25999999999999],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_4d5aa04b638539f965ce56115b14f889 = L.circle(
+                [-23.54, -68.37],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_45f8ebb053d22fc811197abcace86e62 = L.circle(
+                [-22.95, -69.07],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_5a742de0a734189fafd93aaa31fa171a = L.circle(
+                [-31.4, -71.11000000000001],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_ad02dc03e6ec44811426582f9cd256b6 = L.circle(
+                [-22.97, -69.07],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_295e9759652c6738cae1d856f0f4d980 = L.circle(
+                [-23.07, -69.10000000000002],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_3094264fa27a87e2e2fef125ea6b2533 = L.circle(
+                [-22.64, -69.88],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_f31fc60a7bb52a54f587207e2bebfd1b = L.circle(
+                [-23.5, -68.30000000000001],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_76b9ef2e46cdf42ec64a39226a74b963 = L.circle(
+                [-24.28, -69.08999999999997],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_2ee47b9a4781995084d3e62b73f73247 = L.circle(
+                [-26.82, -69.23000000000002],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_a15c3e3e036a1f2221820d9b68ce091b = L.circle(
+                [-22.22, -68.87],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_4991ab394c7da262129b0952e50da72c = L.circle(
+                [-38.75, -72.63],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_1cb3d109ed7861046e26472d44701ff1 = L.circle(
+                [-33.17, -70.29000000000002],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_e5c5688822958e505390039442d9a9fa = L.circle(
+                [-22.44, -68.92000000000002],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_4f9c9570250bda043642f129540b0b06 = L.circle(
+                [-36.84, -73.01999999999998],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_642f20741b9d9fca214200260d61b955 = L.circle(
+                [-32.93, -71.49000000000001],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_7f2197cf24f112773d1a1fe03c267e8d = L.circle(
+                [-41.46, -72.95999999999998],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_c2bacd07e5a3d9a117158c46f1f7681d = L.circle(
+                [-33.43, -70.57999999999998],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_60a32502ec6b654bc448a94d136427b3 = L.circle(
+                [-33.44, -70.61000000000001],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_70a35f33589c990e972274e4c716d3e5 = L.circle(
+                [-35.41, -71.63999999999999],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_272e80611ccbb6009d6aa6882eea9d48 = L.circle(
+                [-39.84, -73.20999999999998],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_b7de16b13edcba39daf6a2f373cad0ec = L.circle(
+                [-18.49, -70.30000000000001],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_d42217a6f1951b5ae63884ab20beada4 = L.circle(
+                [-37.47, -72.33999999999997],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_0f52b22a314563833b3101d5e9151964 = L.circle(
+                [-22.75, -68.44999999999999],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_0821e709abf8223f026b41a9110e0ac1 = L.circle(
+                [-33.99, -70.61000000000001],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_c2fc657f61e00201edb0598584d488c2 = L.circle(
+                [-52.78, -69.22000000000003],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_2d26a331230ce8e70c93d60b01c1830c = L.circle(
+                [-20.99, -70.18],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_d0e98db8f834777e0d821a695f778d21 = L.circle(
+                [-26.84, -69.13],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_d6c66a2fe7c7a7641846f289cdb132b0 = L.circle(
+                [-43.19, -71.85000000000002],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_eddee5851a38dcbc8c4df2c1222eeac3 = L.circle(
+                [-37.68, -73.64999999999998],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_4274c3c186050702a80d1f001a300a4b = L.circle(
+                [-18.45, -70.11000000000001],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_4c49c98755d07b16b8cada61edf7b2cc = L.circle(
+                [-30.84, -70.69],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_13c08aad29c95e08189a0f2d6eef8a86 = L.circle(
+                [-41.14, -72.39999999999998],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_e7285928c803338658a2cd12a5874fdc = L.circle(
+                [-53.16, -71.05000000000001],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_9fa7e938a121ce753a745b7bbf22bb6d = L.circle(
+                [-37.15, -73.57999999999998],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_f766205aebdd8454648d453bbb12fb0a = L.circle(
+                [-27.59, -70.31],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_48beb7336f0b66b330b535a97d3858ad = L.circle(
+                [-34.79, -70.77999999999997],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_e8b8e877a3beec0872473aee65e26158 = L.circle(
+                [-32.98, -71.00999999999999],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_e1e6f60a76ad2110b26868ff6053730f = L.circle(
+                [-33.02, -71.63999999999999],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_fac2663d5f617c6a5c441da7a6794e6e = L.circle(
+                [-46.48, -73.19],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_6b03b76168fd4d8db6d0b46845d67bcc = L.circle(
+                [-33.46, -70.66000000000003],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_8c0e6abc60011047892d27ab75623efc = L.circle(
+                [-33.46, -70.66000000000003],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_420729ef6333d715dc66ef61785187b9 = L.circle(
+                [-33.45, -70.68],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_3266c03c695a5c1faf90edc0d4680d36 = L.circle(
+                [-33.49, -70.50999999999999],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_fbf501b7e444ca07314ee4efb0a226dc = L.circle(
+                [-33.15, -70.67000000000002],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_92f54895c9cd1daa03bcadefc7a891c1 = L.circle(
+                [-37.34, -71.52999999999997],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_235bf762d72808820051e0392d53ad1b = L.circle(
+                [-23.7, -70.42000000000002],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_a415e621261604d6b14c591e9f2bd814 = L.circle(
+                [-20.27, -70.13],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_7045c0def1fe7ac93fe1469efdea3fbb = L.circle(
+                [-39.81, -73.25],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_2a18b9b38ef28ba5ec645ffc2889686a = L.circle(
+                [-27.39, -70.32],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_cfe65e2c221d913a0067ca1ca9f41db3 = L.circle(
+                [-40.9, -72.41000000000003],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_9dec9019e338e497775d6376b71a8609 = L.circle(
+                [-23.66, -70.38999999999999],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_7e911c928f5483e01d7e71950d76723a = L.circle(
+                [-32.84, -70.94],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_7644a531285fb1ac25f33f1a85a40f60 = L.circle(
+                [-38.72, -72.66000000000003],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_58d5aeec3f52d9f833d0dca081f76f65 = L.circle(
+                [-22.44, -68.88],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            var circle_4460c0acf9f4369c5f0ec31627381361 = L.circle(
+                [-33.12, -71.57999999999998],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.05, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.25, "radius": 50000, "stroke": true, "weight": 1}
+            ).addTo(feature_group_ca338ea596766a0a08eb5df4bd69e3fa);
+        
+    
+            feature_group_ca338ea596766a0a08eb5df4bd69e3fa.addTo(map_10ea40ef89d31e3dd3fbc79b509ce151);
+        
+    
+            var layer_control_8daa941c5d38a302677aa4c7ca6f511e_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_55855d7db9e9b378e396487ac10b4ca5,
+                    "cartodbpositron" : tile_layer_479ad8d42f84618fe94037c042466a56,
+                    "cartodbdarkmatter" : tile_layer_d34f86d4273cd741f1ebb0b6d861bdb8,
+                },
+                overlays :  {
+                    "\ud83d\udce1 Estaciones (68)" : feature_group_01be318647ef818431627a21394e3786,
+                    "\ud83d\udd35 Cobertura" : feature_group_ca338ea596766a0a08eb5df4bd69e3fa,
+                },
+            };
+            let layer_control_8daa941c5d38a302677aa4c7ca6f511e = L.control.layers(
+                layer_control_8daa941c5d38a302677aa4c7ca6f511e_layers.base_layers,
+                layer_control_8daa941c5d38a302677aa4c7ca6f511e_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": false,
+  "autoZIndex": true,
+}
+            ).addTo(map_10ea40ef89d31e3dd3fbc79b509ce151);
+
+        
+    
+            var measure_control_84e71c2435b6ebd12452729ae1b82c55 = new L.Control.Measure(
+                {
+  "position": "topright",
+  "primaryLengthUnit": "kilometers",
+  "secondaryLengthUnit": "miles",
+  "primaryAreaUnit": "sqmeters",
+  "secondaryAreaUnit": "acres",
+});
+            map_10ea40ef89d31e3dd3fbc79b509ce151.addControl(measure_control_84e71c2435b6ebd12452729ae1b82c55);
+
+            // Workaround for using this plugin with Leaflet>=1.8.0
+            // https://github.com/ljagis/leaflet-measure/issues/171
+            L.Control.Measure.include({
+                _setCaptureMarkerIcon: function () {
+                    // disable autopan
+                    this._captureMarker.options.autoPanOnFocus = false;
+                    // default function
+                    this._captureMarker.setIcon(
+                        L.divIcon({
+                            iconSize: this._map.getSize().multiplyBy(2)
+                        })
+                    );
+                },
+            });
+
+        
+</script>
+</html>
